@@ -1,0 +1,25 @@
+{
+  "name": "Egg SAle",
+  "short_name": "tst App",
+  "start_url": "/",
+  "permissions": [
+    {
+      "name": "geolocation",
+      "description": "Allow the app to access your location",
+      "android": {
+        "required": true
+      }
+    }
+  ],
+  "icons": [
+   
+    {
+      "src": "icons/192.png",
+      "type": "image/png",
+      "sizes": "72x72"
+    }
+    
+  ]
+  
+  ,"display": "standalone"
+}
