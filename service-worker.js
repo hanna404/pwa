@@ -1,10 +1,9 @@
 // service-worker.js
 const CACHE_NAME = 'pwa-cache-v33';
 const urlsToCache = [
-    '/',
-    '/index.html',
-    '/app.js?t=3',
-    '/fallback.html' // Add a fallback page
+    '/pwa/index.html',
+    '/pwa/app.js?t=3',
+    '/pwa/fallback.html' // Add a fallback page
 ];
 
 // Install Service Worker and cache necessary files
