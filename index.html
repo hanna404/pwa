@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="app.js?t=3" defer></script>
+<meta name="viewport" content="width=device-width, initial-scale=0.7, minimum-scale=0.4, maximum-scale=1">
+<link rel="manifest" href="https://raw.githubusercontent.com/hanna404/pwa/refs/heads/main/manifest.json">
+
+<style>
+  .body {
+    background:#fffbd6;
+    margin:50px ;
+    direction: rtl;
+    width: 700px;
+  }
+  .table table, th, td  
+    {
+  border: 10px solid white;
+}
+   #invoice table,#invoice th, #invoice  td {
+      border: 1px solid black;
+       padding: 15px;
+  }
+
+  .header {
+    font-size:40px;
+  }
+.inputItem{
+   width: auto;
+    padding: 20px;
+    border: 2px solid #000;
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    text-align: right;
+ /*   min-width: 850px;*/
+  
+}
+.inputItem label{
+  display:block;
+  font-size:35px;
+   width: 190px;
+   text-align: right;
+}
+.inputItem input,select{
+   width: 320px;
+    padding: 10px;
+    border: 1px solid green;
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+   /*float: left;*/
+    text-align: right;
+    
+  font-size:30px;
+}
+.save {
+    color: black;
+    font-size: 100px;
+    background-color: #3faf3f;
+    width: 270px;
+    height: 140px;
+    margin: auto;
+    position: relative;
+    right: 35%;
+    z-index: 1;
+}
+
+.loading {
+    position: fixed;
+    top: 0; right: 0;
+    bottom: 0; left: 0;
+    background: #fff;
+    z-index: 9;
+}
+.loader {
+    left: 50%;
+    margin-left: -4em;
+    font-size: 10px;
+    border: .8em solid rgba(218, 219, 223, 1);
+    border-left: .8em solid rgba(58, 166, 165, 1);
+    animation: spin 1.1s infinite linear;
+}
+.loader, .loader:after {
+    border-radius: 50%;
+    width: 8em;
+    height: 8em;
+    display: block;
+    position: absolute;
+    top: 50%;
+    margin-top: -4.05em;
+}
+#invoiceTable{
+  
+    border: none;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+ .newCustomer{
+display:block;
+ }
+.myradio{display:inline-block;  cursor: pointer;}
+.myactive{background:dodgerblue;color:white;}
+
+/* Appearance only */
+.myradio{padding:3px 7px;margin-left:10px;border:1px solid dodgerblue;border-radius:5px;}
+
+.addbtn {
+  height: 40px;
+  line-height: 40px;  
+  width: 40px;  
+  font-size: 2em;
+  font-weight: bold;
+  border-radius: 50%;
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  float: left;
+    margin-right: 20px;
+}
+
+.removebtn {
+  height: 40px;
+  line-height: 40px;  
+  width: 40px;  
+  font-size: 2em;
+  font-weight: bold;
+  border-radius: 50%;
+  background-color: #ed1818;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  float: left;
+    margin-right: 20px;
+}
+
+.swal-title {
+font-size: 70px;
+}    
+.swal-modal { 
+  position: inherit;
+  right: 10px;
+
+}
+.swal-text {
+    font-size: 50px;
+}
+
+.swal-overlay {
+  position: sticky;
+
+  bottom: 635px;
+}
+
+.swal-button {
+    font-size: 50px;
+}
+
+#totalSumInvoiceCollected
+
+{
+  display:block;
+}
+
+#totalSumInvoice
+
+{
+  display:block;
+}
+#totalSumInvoiceLira
+
+{
+  display:none;
+}
+  </style>
+  </head>
+  <body dir="rtl" class="body">
+    <div class="loading">
+     <div class="loader"></div>
+ </div>
+ <script>
+  
+    //get locations
+   function getSalesSheetJson (){
+
+   
+    
+    let url = 'https://script.google.com/macros/s/AKfycbxaCGtz5m1f9tTb2jvJ81tiGRn2sl-rNbNtcpxNGZqabCUkqbiNBDuGGQtlbKDNW2Zqkw/exec?id='+encodeURIComponent(id);
+    fetch(url)
+.then(res => res.json())
+.then(out =>
+  processSalesSheetData(out)
+)
+  
+.catch(err => console.log(err));
+}
+   
+
+    function processSalesSheetData (jsData) {
+      checkData();
+processLocationData(jsData.locations);
+processCustomersData(jsData.customers);
+processItemData(jsData.types);
+console.log("jsData1");
+     console.log(jsData)
+      console.log("jsData2");
+
+      $(".loading").hide();
+  }
+  
+
+    function processLocationData (jsData){
+      console.log("jsData1");
+      getLocationSelectOptions(jsData)
+      console.log("jsData2");
+      
+    }
+
+ 
+    function processCustomersData (jsData){
+      console.log("jsData1");
+      getCustomerSelectOptions(jsData);
+      console.log("jsData2");
+    }
+    function processItemData (jsData){
+      getItemSelectOptions (jsData);
+    }
+   
+ 
+
+function getCustomerSelectOptions(arrayOfLocations){
+      let html=`<option  style="display:none"  disabled selected  value="" > </option>`;
+
+      for (i=0; i<arrayOfLocations.length;i++){
+        let optionVal= `<option phone="${arrayOfLocations[i].phone}" location="${arrayOfLocations[i].location}" value="${arrayOfLocations[i].name}" >${arrayOfLocations[i].name}</option>`;
+        html+=optionVal;
+      }
+
+
+      console.log("html");
+      console.log(html);
+      console.log("htm2");
+   document.getElementById("customerSelect").innerHTML = html;
+
+    }
+
+
+function getItemSelectOptions(arrayOfLocations){
+      let html=`<option  style="display:none"  disabled selected  value="" > </option>`;
+
+      for (i=0; i<arrayOfLocations.length;i++){
+        let optionVal= `<option price="${arrayOfLocations[i].cost}" avrgcost="${arrayOfLocations[i].averageCost}" value="${arrayOfLocations[i].id}" >${arrayOfLocations[i].type.replace(/&nbsp;/g, ' ')}</option>`;
+        html+=optionVal;
+      }
+
+
+      console.log("html");
+      console.log(html);
+      console.log("htm2");
+   document.getElementById("itemSelect").innerHTML = html;
+
+    }
+    function getLocationSelectOptions(arrayOfLocations){
+      let html=`<option value="غير محدد "> غير محدد  </option>`;
+
+      for (i=0; i<arrayOfLocations.length;i++){
+        let optionVal= `<option value="${arrayOfLocations[i].name}" > ${arrayOfLocations[i].name}</option>`;
+        html+=optionVal;
+      }
+
+
+      console.log("html");
+      console.log(html);
+      console.log("htm2");
+     document.getElementById("location").innerHTML = html;
+
+    }
+
+    //get customers 
+
+    //get Types and prices
+
+    function saveSale(){
+        // save item sales 
+        
+        // save customer if new, else skip
+
+        //
+
+    }
+function sendMessageAfterSuccess (){
+
+}
+
+if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+        position => {
+            console.log("Latitude: " + position.coords.latitude);
+            console.log("Longitude: " + position.coords.longitude);
+        },
+        error => {
+            console.error("Geolocation permission denied or error: " + error.message);
+        }
+    );
+} else {
+    console.error("Geolocation is not supported by this browser.");
+}
+
+// handling div buttons
+
+console.log("test co11");
+$(document).ready(function(){
+ // $(".loading").hide();
+   checkData();
+   // Scroll the page to the far right
+   $(window).scrollLeft($(document).width());
+
+    getSalesSheetJson();
+$('.myradio').click(function(){
+
+console.log("test co111"+$(this).attr('id'));
+if ($(this).attr('id')=="newCustomerToggel"){
+$(".newCustomer").show();
+$(".oldCustomer").hide();
+
+}
+else {
+$(".newCustomer").show();
+$(".oldCustomer").show();
+}
+$('.myradio').removeClass('myactive');
+$(this).addClass('myactive');
+});
+// show hide dive
+console.log("test co");
+
+
+
+});
+
+console.log("test co22");
+function changeLocHandler(a) {
+  $("#customerSelect").val([]);
+  let valtoHide= a.find(":selected").attr('value');
+  $("#customerSelect option").hide();
+  $("#customerSelect option[location='"+valtoHide+"']").show();
+
+  if($('#location').prop('selectedIndex')==0){
+    
+    $("#customerSelect option").show();
+    $("#newLocation").prop('disabled', false);
+     $("#newLocation").val('');
+  }
+  else {
+      $("#newLocation").prop('disabled', true);
+      $("#newLocation").val(valtoHide);
+  }
+}
+let oldCustomerBool=false;
+function selectCustomerHandler(a) {
+  //$("#location").val($("#location option:first").val());
+  $("#newLocation").prop('disabled', true);
+  $("#newLocation").val(a.find(":selected").attr('location'));
+ oldCustomerBool=true;
+  $("#customerName").val(a.find(":selected").attr('value'));
+  $("#customerPhone").val(a.find(":selected").attr('phone'));
+       $("#customerName").prop('disabled', true);
+   $("#customerPhone").prop('disabled', true);
+}
+
+  function selectTypeHandler(a) {
+  let price= a.find(":selected").attr('price');
+  let averageCost= a.find(":selected").attr('avrgcost');
+  //$("#visiblePrice").val(price);
+  $("#averageCost").val(averageCost);
+  // $("#visiblePrice").attr("placeholder", price);
+}
+
+function clearCustomerSelect()
+{
+  
+  oldCustomerBool=false;
+  $('#customerSelect').prop('selectedIndex',-1);
+   $("#customerName").val('');
+   $("#customerPhone").val('');
+   $("#newLocation").val('');
+   $("#customerName").prop('disabled', false);
+   $("#newLocation").prop('disabled', false);
+   $("#customerPhone").prop('disabled', false);
+}
+// adding item script
+function clearItemSelect(){
+  $('#itemSelect').prop('selectedIndex',0);
+  $('#visiblePrice').val('');
+  $('#boxQ').prop('selectedIndex',0);
+  
+  $("#averageCost").val('');
+  $('#itemQuantity').val('');
+}
+//translate arabic numbers to english
+ const a2e = s => s.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+
+function addItem(){
+  let itemName=$('#itemSelect').find(":selected").text();
+  let itemBoxPrice=$('#visiblePrice').val();
+  let itemPkg = $('#boxQ').find(":selected").val();
+  let quantityInBox= $('#itemQuantity').val();
+  let averageCost = $('#averageCost').val(); 
+
+
+// convertt what needs conversion for arabic JS numbers
+
+  itemBoxPrice=a2e(itemBoxPrice);
+  quantityInBox=a2e(quantityInBox);
+
+/// end of conversion 
+
+// convert strings to numbers
+
+  itemBoxPrice=Number(itemBoxPrice);
+  averageCost=Number(averageCost);
+  quantityInBox=Number(quantityInBox);
+
+// end convert string to numbers
+let totalItemPrice =  quantityInBox*itemBoxPrice;
+
+  if(itemPkg=="carton") {
+    totalItemPrice= (totalItemPrice/12).toPrecision(3);
+    quantityInBox= (quantityInBox/12).toPrecision(3);
+  //    totalItemPrice=Math.round((totalItemPrice + Number.EPSILON) * 100) / 100;
+ // quantityInBox=Math.round((quantityInBox + Number.EPSILON) * 100) / 100;
+  }
+
+let totalItemAverageCost =  quantityInBox*averageCost;
+
+
+  let template = `      <tr class="itemInTable">
+                <td><label style="  width: auto;" >${itemName}</label ></td>
+                <td><label style="  width: auto;">${itemBoxPrice}</label ></td>
+                <td><label style="  width: auto;">${quantityInBox}</label ></td>
+                <td><label style="  width: auto;">${totalItemPrice}</label ></td>
+                <td> <label style=" display:none">${averageCost}</label>  <div class="removebtn" onclick="removeItem($(this))">x</div> </td>
+
+                </tr>` ;
+              //  alert(template);
+
+    $('#invoice tr:last').after(template);    
+    clearItemSelect();
+    updateTotalInvoice();      
+
+}
+function removeItem (a) {
+ 
+   $(a).closest('tr').remove(); 
+   
+    updateTotalInvoice();      
+}
+let invoiceObject = [];
+let invoiceText = ``;
+function updateTotalInvoice () {
+  invoiceObject = [];
+  invoiceText = ``;
+  let table = document.getElementById("invoice");
+  
+  var totalPrice=0;
+  
+for (var i = 1, row; row = table.rows[i]; i++) {
+let rowItem = {
+  type:row.cells[0].getElementsByTagName("label")[0].innerHTML.replace(/&nbsp;/g, ' '),
+  priceBox:row.cells[1].getElementsByTagName("label")[0].innerHTML,
+  quantity:row.cells[2].getElementsByTagName("label")[0].innerHTML,
+  totalPrice:row.cells[3].getElementsByTagName("label")[0].innerHTML,
+  averageCost:row.cells[4].getElementsByTagName("label")[0].innerHTML
+}
+
+console.log("row.cells[ erHTML");
+invoiceObject.push(rowItem);
+totalPrice+=rowItem.totalPrice*1.00;
+invoiceText+=rowItem.type+" عدد صندوق : "+rowItem.quantity+"  سعر : "+ rowItem.totalPrice +"$";
+invoiceText+=`
+`;
+
+}
+console.log(totalPrice);
+$("#totalSumInvoiceSpan").html(totalPrice);
+$("#totalSumInvoice").val(totalPrice);
+$("#totalSumInvoiceCollected").val(totalPrice);
+
+$("#totalSumInvoiceLiraSpan").html(totalPrice*90000);
+// add a hidden field to savew the value of the total invoice
+$("#totalSumInvoiceServer").val(totalPrice);
+
+}
+  </script>
+  <h1 class="header" id="h1Val"> aaaaa فاتورة البيع الرسمية </h1>
+  <br><br>
+  <form id="inForm" onsubmit="event.preventDefault(); geoFindMe(this);">
+    <input type=hidden  name="method" value="add"/>
+    <div class="inputItem">
+<label>المنطقة  </label>
+    <select id="location" onchange="changeLocHandler($(this))">
+      <option value="غير محدد "> غير محدد  </option> 
+    </select>
+    </div>
+  
+    <br>  <br>
+    <div class="inputItem" style="display:none">
+         <label>العميل القديم؟ </label>
+         <br>
+<div id="oldCustomerToggel" class="myradio myactive">'old customer'</div>
+<div id="newCustomerToggel" class="myradio">'new customer'</div>
+
+    </div>
+    <div class="inputItem oldCustomer">
+       <label>العميل القديم؟ </label>
+     <select id="customerSelect" onchange="selectCustomerHandler($(this))">  </td>
+    </select>
+    <div class="removebtn" style ="    margin-left: 20px;  margin-top: 10px;"  onclick="clearCustomerSelect()">x</div>
+    </div> 
+<br>      <br>  
+      <div class="inputItem newCustomer">
+       <label style="width:auto" >ملء معلومات العميل </label>
+<br><br>
+    <label>المنطقة  </label>
+   <input type=text  name="newLocation" id="newLocation"/>
+    <br>
+     <br>
+     <br><br>
+     <label>اسم العميل</label>
+   <input type=text  name="customerName" id="customerName"/>
+    <br>
+     <br>
+       <label>رقم التليفون</label>
+   <input type="tel"  name="customerPhone"  id="customerPhone"/>
+    </div>
+    <br>  <br>
+     <div style="width: 180px;"><h1>إضافة عنصر </h1></div> 
+        <div class="inputItem" >
+
+          <table dir="rtl">
+            <tr> 
+             <th> <label >غرض </label> </th>
+             <th> <label  >سعر الصندوق </label> </th>
+             <th>  <label style="width: 60px;">	كمية </label></th>
+             <th>   <select id="boxQ" style="width: 130px;">
+                          <option value="box" >  صندوق  </option> 
+                          <option value="carton" >  كرتون  </option> 
+                          
+                          </select>
+                          </th>
+              </tr>
+              <tr>
+                <td><select id="itemSelect" onchange="selectTypeHandler($(this))" style="width: 170px; margin-left: 20px;"> </select> </td>
+                <td>  <input type="number"  id="visiblePrice" value="" placeholder="" style="width:80px ; margin-left: 70px;" /><input type="hidden"  id="averageCost" value="" placeholder="" /></td>
+                <td> <input type="number" id="itemQuantity" value="" placeholder="" style="width:80px" />
+                             </td>
+                <td> <div class="addbtn" onclick="addItem()">+</div> </td>
+
+                </tr>
+            </table>
+                      
+                       
+                             
+                             </div>
+                             <br><br>
+  
+    </div>
+    <div style="width: 500px; ">
+    <div style="width: 100px;"><h1>الفاتورة </h1></div> 
+    </div>
+    <div id="invoiceTable" class="inputItem">
+                 <table id="invoice" dir="rtl">
+            <tr> 
+             <th> <label >غرض</label> </th>
+             <th> <label style="  width: auto;" >سعر الصندوق </label> </th>
+             <th>  <label style="  width: auto;" >كمية </label></th>
+             <th>  <label style="  width: auto;">السعر الإجمالي</label> </th>
+               <th style="  width: auto;">  <label>. </label> </th>
+              </tr>
+
+            </table>
+   </div>
+
+
+    <br>  <br>
+    <div class="inputItem" style="width:auto">
+                       <label style="width:auto" >المجموع <span id="totalSumInvoiceSpan"> </span> $ </label>
+ 
+   <br><br>
+                         <label style="width:auto">أو 
+                         <span id="totalSumInvoiceLiraSpan"> </span> L.L. </label>
+   <input type="number"  id="totalSumInvoiceLira"  name="totalSumInvoiceLira" placeholder="القبض" />
+ 
+   <input type="hidden"  id="totalSumInvoiceServer" name="totalSumInvoiceServer"/>
+   <input type="hidden"  id="vanNumber" name="vanNumber" value=van1 />
+    </div>
+    <br>  <br>
+    <div class="inputItem" style="width:auto">
+                       <label style="width:auto" >القبض $ </label>
+   <input type="number"  id="totalSumInvoice"  step="any" name="totalSumInvoice" placeholder="القبض" />
+  
+    </div>
+    
+    <br><br>
+    <button class="save" >   يحفظ   </label> </button>
+    
+   <input type="hidden"  name="alt" />
+   <input type="hidden"  name="long"/>
+    </form>
+  
+</body>
+<script>
+
+  
+
+
+  function onSuccess() {
+    let number=a2e ($("#customerPhone").val());
+    let convNumber = Number(number);
+    let wNumber="+961"+convNumber;
+    let text = `فاتورة رسمية : 
+---------------------------
+`;
+text+=invoiceText;
+text+= `
+---------------------------
+
+المجموع :    ${$("#totalSumInvoiceSpan").html()} $
+   
+---------------------------
+   `;
+
+   
+  // alert (encodeURIComponent(text));
+//  alert(invoiceText);
+
+ swal({
+title: 'نجح',
+text: ' تمت العملية بنجاح، شكرا لك'+' \n'+invoiceText,
+icon: "success",
+    closeOnClickOutside: false,
+    closeOnEsc: false,
+buttons: {
+    cancel: "أغلقه",
+  confirm: " أرسل رسالة",
+ 
+},
+})
+.then((willSendWhatsap) => {
+if (willSendWhatsap) {
+  window.open('https://wa.me/'+wNumber+'?text='+encodeURIComponent(text), '_blank');
+  swal(' مرسل', {
+    icon: "success",
+    closeOnClickOutside: false,
+    closeOnEsc: false
+  }).then(function(){ 
+ reLoad();
+ });
+} else {
+  swal(' شكرًا لك').then(function(){ 
+reLoad();
+ });
+}
+});
+    }
+
+   
+
+
+ function geoFindMe(form) {
+//$(".save").prop('disabled', true);
+     geolocation = new Promise((resolve, reject) => {
+navigator.geolocation.watchPosition(
+  position => { resolve(position.coords) },
+  error => { reject(error) }
+)
+}).catch(error => error)
+    
+
+    
+
+      if(!navigator.geolocation) {
+      } else {
+       new Promise(function(resolve,reject){
+
+resolve(geolocation);
+
+}).then(function(coords){
+    console.log("koukou in then 4");
+  form.alt.value=coords.latitude;
+  form.long.value=coords.longitude;
+}).then(function(){ 
+    console.log("koukou in then 5");
+let objToSave = {
+    method:'add',
+    e:id,
+  arrayOfItems:invoiceObject,
+  alt:form.alt.value,
+  longi:form.long.value,
+  name:form.customerName.value,
+  phone:a2e(form.customerPhone.value),
+  location:form.newLocation.value,
+ bankDollar:a2e(form.totalSumInvoice.value),
+bankLira:a2e(form.totalSumInvoiceLira.value),
+ totalHiddenBankAccount:form.totalSumInvoiceServer.value,
+ vanNumber:user,
+ oldCustomer:oldCustomerBool,
+ jsTs:Date.now().toString()
+
+}
+
+console.log("koukou in then 7");
+       if (navigator.onLine) {
+        sendRequest(objToSave);
+       console.log( 'Data sent successfully!');
+    } else {
+        // Save the request in IndexedDB if offline
+        saveRequest(objToSave);
+          console.log('Offline. Data will be sent when online.');
+    }
+
+     onSuccess();
+  
+// fetch the data to google api 
+
+//run the onSuccess handler in the resolve promise
+
+// handle the save later google.script.run.withSuccessHandler(onSuccess).saveToGoogleSheet(objToSave)
+});
+
+      }
+    }
+
+function reLoad() {
+  // handle reload
+  window.location.reload();
+}
+
+</script>
+
+
+</html>

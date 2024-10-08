@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    .error {
+      color: red;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body  dir="rtl">
+
+  <div class="login-container">
+    <h2>تسجيل الدخول</h2>
+    <form id="loginForm">
+      <input type="text" id="username" name="username" placeholder="اسم المستخدم " required>
+      <input type="password" id="password" name="password" placeholder="كلمة المرور" required>
+      <input type="submit" value="تسجيل الدخول">
+      <p id="errorMessage" class="error"></p>
+    </form>
+  </div>
+
+
+
+   <script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+        const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      let data = {
+        username: username,
+        password:password
+      }
+
+      fetch('/checkLogin.php', {
+        mode: 'no-cors',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => processUserResponse(data))
+    .catch(error => {
+        console.log('Error sending data:', error);
+ 
+    });
+
+
+     
+    });
+
+    function processUserResponse(a){
+        if (a['status']== "success"){
+        localStorage.setItem('user', a['username']);
+        localStorage.setItem('e', a['e']);
+        window.location='index.html';}
+        else {
+        window.location='login.html';
+        }
+}
+  </script>
+
+</body>
+</html>
