@@ -1,0 +1,30 @@
+<html>
+  <body>
+    <button id="getLocationBtn">Get Location</button>
+    <a href=index.html> index </a>
+<script>
+document.getElementById('getLocationBtn').addEventListener('click', function() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                console.log('Latitude: ' + position.coords.latitude);
+                console.log('Longitude: ' + position.coords.longitude);
+            },
+            function(error) {
+                console.error("Error occurred: ", error.message);
+            }
+        );
+    } else {
+        console.error("Geolocation is not supported by this browser.");
+    }
+});
+
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    console.log('The app is running in standalone mode.');
+} else {
+    console.log('The app is running in the browser.');
+}
+  
+</script>
+  </body>
+</html>
