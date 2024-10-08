@@ -187,8 +187,14 @@ font-size: 70px;
      <div class="loader"></div>
  </div>
     <button id="getLocationBtn">Get Location</button>
-    <a href=test.html> test </a>
+    <a href=test.html> test2 </a>
 <script>
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+    console.log('The app is running in standalone mode.');
+} else {
+    console.log('The app is running in the browser.');
+}
+  
 document.getElementById('getLocationBtn').addEventListener('click', function() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
