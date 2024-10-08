@@ -86,7 +86,7 @@
         password:password
       }
 
-      fetch('https://cors-anywhere.herokuapp.com/https://eggsale.rf.gd/checkLogin.php', {
+      fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://eggsale.rf.gd/checkLogin.php')}`, {
        
         method: 'POST',
         headers: {
