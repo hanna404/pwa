@@ -96,6 +96,7 @@
     });
 
     function processUserResponse(a){
+      alert(1);
         if (a['status']== "success"){
         localStorage.setItem('user', a['username']);
         localStorage.setItem('e', a['e']);
