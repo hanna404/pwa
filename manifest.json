@@ -1,7 +1,7 @@
 {
-  "name": "Egg SAle",
-  "short_name": "tst App",
-  "start_url": "/",
+  "name": "Egg Sale v5",
+  "short_name": "test App",
+  "start_url": "/pwa/index.html",
   "permissions": [
     {
       "name": "geolocation",
