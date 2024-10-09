@@ -217,6 +217,8 @@ console.log("jsData1");
       console.log("jsData2");
 
       $(".loading").hide();
+      var left = $(document).outerWidth() - $(window).width();
+$('body, html').scrollLeft(left);
   }
   
 
