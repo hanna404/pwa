@@ -186,31 +186,8 @@ font-size: 70px;
     <div class="loading">
      <div class="loader"></div>
  </div>
-    <button id="getLocationBtn">Get Location</button>
-    <a href=test.html> test2 </a>
-<script>
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-    console.log('The app is running in standalone mode.');
-} else {
-    console.log('The app is running in the browser.');
-}
-  
-document.getElementById('getLocationBtn').addEventListener('click', function() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function(position) {
-                console.log('Latitude: ' + position.coords.latitude);
-                console.log('Longitude: ' + position.coords.longitude);
-            },
-            function(error) {
-                console.error("Error occurred: ", error.message);
-            }
-        );
-    } else {
-        console.error("Geolocation is not supported by this browser.");
-    }
-});
-</script>
+ 
+
 
  <script>
   
@@ -526,7 +503,7 @@ $("#totalSumInvoiceServer").val(totalPrice);
 
 }
   </script>
-  <h1 class="header" id="h1Val"> aaaaa فاتورة البيع الرسمية </h1>
+  <h1 class="header" id="h1Val"> فاتورة البيع الرسمية </h1>
   <br><br>
   <form id="inForm" onsubmit="event.preventDefault(); geoFindMe(this);">
     <input type=hidden  name="method" value="add"/>
