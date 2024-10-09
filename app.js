@@ -10,7 +10,7 @@ function checkData () {
    user= localStorage.getItem("user");
 if (id===null){
     console.log("check data 2 ");
-    window.location.href="login.html";
+//    window.location.href="login.html";
 }
 else {
    
