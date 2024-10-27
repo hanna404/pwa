@@ -171,6 +171,7 @@ font-size: 70px;
 .navbar-custom {
         background-color: #3faf3f;
         color: white;
+        right: -52%;
       }
 
       .navbar-custom .navbar-brand {
@@ -197,3 +198,7 @@ font-size: 70px;
           padding: 10px;
         }
       }
+
+      .navbar-custom .navbar-nav {
+        margin-left: auto; /* This pushes the navbar to the right */
+    }
