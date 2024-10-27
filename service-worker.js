@@ -1,8 +1,10 @@
 // service-worker.js
-const CACHE_NAME = 'pwa-cache-v39';
+const CACHE_NAME = 'pwa-cache-v40';
 const urlsToCache = [
     '/pwa/index.html',
     '/pwa/app.js?t=4',
+    '/pwa/style.css',
+    '/pwa/navbar.html',
     '/pwa/fallback.html' // Add a fallback page
 ];
 

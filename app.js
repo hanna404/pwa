@@ -4,6 +4,13 @@ var id="";
 var user="";
 // check data
 
+fetch('navbar.html')
+.then(response => response.text())
+.then(data => {
+  document.getElementById('navbar').innerHTML = data;
+})
+.catch(error => console.error('Error loading navbar:', error));
+
 function checkData () {
   
    id= localStorage.getItem("e");
